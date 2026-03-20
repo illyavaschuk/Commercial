@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UnderDefense | Threat Intel Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #0b0f19;
+            --bg-panel: #151b28;
+            --bg-card: #1c2333;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --accent: #00d4ff;
+            --accent-hover: #00b0d6;
+            --danger: #ff4757;
+            --border: #2a3441;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background-color: var(--bg-panel);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            z-index: 10;
+        }
+
+        .logo {
+            padding: 0 20px 20px 20px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .logo h1 {
+            color: var(--accent);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 24px;
+            letter-spacing: -1px;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+        }
+
+        .logo span { color: var(--text-main); font-size: 12px; display: block; margin-top: 5px;}
+
+        .nav-item {
+            padding: 15px 25px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+            border-left: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(0, 212, 255, 0.05);
+            color: var(--text-main);
+        }
+
+        .nav-item.active {
+            color: var(--accent);
+            border-left: 3px solid var(--accent);
+            background-color: rgba(0, 212, 255, 0.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 40px;
+            background-image: radial-gradient(circle at top right, rgba(0, 212, 255, 0.05), transparent 40%);
+        }
+
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        h2.section-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 28px;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Grid & Cards */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .card:hover { transform: translateY(-3px); border-color: var(--accent); }
+        .card h3 { color: #fff; margin-bottom: 10px; font-size: 18px; display: flex; justify-content: space-between;}
+        .card .badge { font-size: 12px; padding: 3px 8px; border-radius: 12px; background: rgba(255,71,87,0.1); color: var(--danger); border: 1px solid var(--danger); font-family: 'JetBrains Mono', monospace;}
+        .card p { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin-bottom: 15px; flex-grow: 1; }
+
+        .apt-details { list-style: none; margin-bottom: 20px; font-size: 13px;}
+        .apt-details li { margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dashed var(--border);}
+        .apt-details strong { color: var(--accent); }
+
+        .btn {
+            background-color: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            transition: all 0.2s;
+            text-align: center;
+            width: 100%;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover { background-color: var(--accent); color: var(--bg-base); border-color: var(--accent); }
+        .btn-primary { background-color: var(--accent); color: var(--bg-base); font-weight: bold; border-color: var(--accent);}
+        .btn-primary:hover { background-color: var(--accent-hover); box-shadow: 0 0 15px rgba(0, 212, 255, 0.4); }
+
+        /* Forms */
+        .form-group { margin-bottom: 20px; }
+        .form-row { display: flex; gap: 20px; }
+        .form-row .form-group { flex: 1; }
+        label { display: block; margin-bottom: 8px; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+        input, select, textarea {
+            width: 100%; padding: 12px 16px; border-radius: 6px;
+            border: 1px solid var(--border); background-color: var(--bg-base);
+            color: var(--text-main); font-family: 'Inter', sans-serif; font-size: 14px; transition: border 0.2s;
+        }
+        textarea { min-height: 120px; resize: vertical; font-family: 'JetBrains Mono', monospace; font-size: 13px;}
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
+
+        .report-builder-container {
+            background: var(--bg-card); padding: 30px; border-radius: 8px; border: 1px solid var(--border);
+            max-width: 1000px; margin: 0 auto;
+        }
+
+        .export-panel { display: flex; gap: 15px; margin-top: 20px; }
+        .export-panel .btn { flex: 1; }
+
+        /* Iframe Container */
+        .iframe-container {
+            width: 100%;
+            height: calc(100vh - 200px);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #fff; /* RansomLook generally has a white/light bg by default */
+        }
+        .iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .tracker-info {
+            background-color: rgba(0, 212, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="logo">
+            <h1>[UD] OSINT</h1>
+            <span>Threat Intelligence Platform</span>
+        </div>
+        <div class="nav-item active" onclick="switchTab('apt-db', this)">🎯 База знань APT</div>
+        <div class="nav-item" onclick="switchTab('ransom-tracker', this)">📡 RansomLook Трекер</div>
+        <div class="nav-item" onclick="switchTab('report-builder', this)">📝 Генератор звіту</div>
+        <div class="nav-item" onclick="switchTab('tools-catalog', this)">🛠️ Каталог інструментів</div>
+    </aside>
+
+    <main class="main-content">
+
+        <section id="apt-db" class="tab-content active">
+            <h2 class="section-title">Профілі Досліджуваних Угруповань</h2>
+            <div class="grid">
+
+                <div class="card">
+                    <h3>Cl0p (TA505) <span class="badge">FINDEV</span></h3>
+                    <ul class="apt-details">
+                        <li><strong>Спонсор:</strong> Невідомо (Фінансовий мотив)</li>
+                        <li><strong>Цілі:</strong> Глобальні корпорації, MFT сервери (MOVEit, Accellion), фінансовий сектор.</li>
+                        <li><strong>Інструменти:</strong> LEMURLOOT, DEWMODE, FlawedAmmyy RAT, Cobalt Strike.</li>
+                        <li><strong>Фігуранти (Укр):</strong> Котенко І., Підвальний О.І.</li>
+                    </ul>
+                    <p>Еволюціонували від шифрувальників до Data-only extortion (вимагання без шифрування). Використовують 0-day вразливості та відмивають кошти через криптобіржі.</p>
+                    <button class="btn btn-primary" onclick="loadAptTemplate('clop')">Завантажити у звіт ↗</button>
+                </div>
+
+                <div class="card">
+                    <h3>Energetic Bear <span class="badge">ФСБ РФ</span></h3>
+                    <ul class="apt-details">
+                        <li><strong>Спонсор:</strong> В/Ч 71330 (Центр 16 ФСБ)</li>
+                        <li><strong>Цілі:</strong> Енергетичний сектор (ICS/SCADA), авіація, урядові мережі.</li>
+                        <li><strong>Інструменти:</strong> Havex RAT, Karagany, Listrix.</li>
+                        <li><strong>Фігуранти:</strong> Акулов П.О., Гаврилов М.М., Тюков М.В.</li>
+                    </ul>
+                    <p>Спеціалізуються на кібершпигунстві та атаках на ланцюжки постачань (Supply Chain). Основна мета — закріплення в мережах критичної інфраструктури.</p>
+                    <button class="btn btn-primary" onclick="loadAptTemplate('energetic')">Завантажити у звіт ↗</button>
+                </div>
+
+                <div class="card">
+                    <h3>Ember Bear <span class="badge">ГРУ РФ</span></h3>
+                    <ul class="apt-details">
+                        <li><strong>Спонсор:</strong> В/Ч 29155 (Військова розвідка)</li>
+                        <li><strong>Цілі:</strong> Урядові та комерційні структури України, транспорт, логістика.</li>
+                        <li><strong>Інструменти:</strong> WhisperGate (Wiper), кастомні деструктивні скрипти.</li>
+                        <li><strong>Фігуранти:</strong> Денисов, Стігал, Шевченко, та ін.</li>
+                    </ul>
+                    <p>Використовують деструктивне ПЗ (wiper), маскуючи його під звичайні віруси-вимагачі. Мета — повне знищення даних та дестабілізація систем.</p>
+                    <button class="btn btn-primary" onclick="loadAptTemplate('ember')">Завантажити у звіт ↗</button>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="ransom-tracker" class="tab-content">
+            <h2 class="section-title">
+                Моніторинг Ransomware (RansomLook)
+                <a href="https://www.ransomlook.io/groups" target="_blank" class="btn" style="width: auto; padding: 8px 15px;">Відкрити в новій вкладці ↗</a>
+            </h2>
+            <div class="tracker-info">
+                <strong>💡 Що це таке?</strong> Цей модуль інтегрує глобальний трекер <b>RansomLook.io</b>. Він дозволяє в реальному часі відстежувати Data Leak Sites (DLS) кіберзлочинних угруповань (таких як Cl0p, LockBit, ALPHV), перевіряти статус їхніх Tor-доменів та моніторити нових жертв.
+                <i>Якщо сторінка не завантажується через обмеження браузера, скористайтеся кнопкою вище.</i>
+            </div>
+
+            <div class="iframe-container">
+                <iframe src="https://www.ransomlook.io/groups" title="RansomLook Groups Tracker"></iframe>
+            </div>
+        </section>
+
+        <section id="report-builder" class="tab-content">
+            <h2 class="section-title">Генератор OSINT-Звіту</h2>
+            <div class="report-builder-container">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Автор / Аналітик:</label>
+                        <input type="text" id="repAuthor" placeholder="Ваше ПІБ / Команда">
+                    </div>
+                    <div class="form-group">
+                        <label>TLP (Traffic Light Protocol):</label>
+                        <select id="repTLP">
+                            <option value="TLP:CLEAR">TLP:CLEAR (Публічні відкриті дані)</option>
+                            <option value="TLP:GREEN">TLP:GREEN (Тільки для учасників)</option>
+                            <option value="TLP:AMBER">TLP:AMBER (Чутливі знахідки)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Досліджуване угрупування (APT):</label>
+                        <input type="text" id="repApt" placeholder="Напр. Cl0p, Fancy Bear...">
+                    </div>
+                    <div class="form-group">
+                        <label>Спонсор / Куратор:</label>
+                        <input type="text" id="repCurator" placeholder="ФСБ, ГРУ, Невідомо...">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Цілі та вектори атаки:</label>
+                    <textarea id="repTargets" placeholder="Опишіть сектори, які атакує угрупування, та методи проникнення..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Аналітичні висновки (Індикатори, TTPs, Фігуранти):</label>
+                    <textarea id="repConclusions" placeholder="Опишіть техніки за MITRE, інфраструктуру, імена фігурантів..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Посилання на джерела (URLs):</label>
+                    <textarea id="repSources" placeholder="https://www.fbi.gov/...&#10;https://attack.mitre.org/..."></textarea>
+                </div>
+
+                <label style="margin-top: 30px;">Експорт документа:</label>
+                <div class="export-panel">
+                    <button class="btn" onclick="exportReport('txt')">📄 Завантажити .TXT</button>
+                    <button class="btn" onclick="exportReport('md')" style="border-color: #a29bfe; color: #a29bfe;">📝 Завантажити .MD</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="tools-catalog" class="tab-content">
+            <h2 class="section-title">Каталог інструментів OSINT</h2>
+            <div class="form-group">
+                <input type="text" id="searchInput" placeholder="> Пошук інструментів (напр. 'Shodan', 'Recon')...">
+            </div>
+            <div id="catalogContainer" class="grid" style="margin-top: 20px;">
+                </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- NAVIGATION LOGIC ---
+        function switchTab(tabId, element) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            element.classList.add('active');
+        }
+
+        // --- PRE-LOADED APT DATA ---
+        const aptDatabase = {
+            'clop': {
+                apt: 'Cl0p (TA505)',
+                curator: 'Невідомо / Фінансово мотивовані (Cybercrime)',
+                targets: 'Глобальні корпорації, фінансовий сектор, університети. \nВектор: Експлуатація 0-day вразливостей в системах передачі файлів (MFT) - Accellion, Fortra GoAnywhere, MOVEit (CVE-2023-34362), Oracle EBS.',
+                conclusions: '- Еволюція: Від шифрувальників до "Data-only extortion" (викрадення без шифрування).\n- Інструменти: LEMURLOOT, DEWMODE, GOLDTOMB, FlawedAmmyy RAT.\n- Інфраструктура: Використання українських хостингів (напр. ТОВ «ІТЛ» у Харкові) для атак.\n- Відмивання: Використання криптобірж (Binance, EXMO), транзитні гаманці BCH.\n- Фігуранти (легалізація): Котенко І., Підвальний О.І.',
+                sources: 'https://www.cisa.gov/news-events/cybersecurity-advisories/aa23-158a\nhttps://attack.mitre.org/groups/G0092/\nhttps://cyberpolice.gov.ua/news/kiberpolicziya-vykryla-xakerske-ugrupovannya-yake-zavdalo-zbitkiv-inozemnym-kompaniyam-na-ponad-500-miljoniv-dolariv-8270/'
+            },
+            'energetic': {
+                apt: 'Energetic Bear (Dragonfly / Crouching Yeti)',
+                curator: 'ФСБ РФ (Військова частина 71330 - Центр 16)',
+                targets: 'Енергетичний сектор США та Європи (електростанції), авіація, виробники промислового обладнання.\nВектор: Spear-phishing інженерів, атаки типу Watering Hole, впровадження шкідливого коду в легітимні оновлення (Supply Chain).',
+                conclusions: '- Мета: Кібершпигунство та закріплення в промислових мережах (ICS/SCADA) для можливості фізичного відключення інфраструктури.\n- Інструменти: Havex RAT (з модулем OPC-сканера для промислового обладнання), Karagany, Listrix.\n- OPSEC: Високий рівень скритності, використання системних утиліт Windows (Living off the Land).\n- Офіцери ФСБ (розшук ФБР): Акулов П.О., Гаврилов М.М., Тюков М.В.',
+                sources: 'https://www.justice.gov/opa/pr/four-russian-government-employees-charged-two-historical-hacking-campaigns-targeting\nhttps://www.cisa.gov/news-events/alerts/2020/10/22/cisa-and-fbi-release-joint-advisories-regarding-russian-and-iranian-apt-actors\nhttps://attack.mitre.org/groups/G0035/'
+            },
+            'ember': {
+                apt: 'Ember Bear (Cadet Blizzard / UAC-0056)',
+                curator: 'ГРУ РФ (Військова розвідка, В/Ч 29155)',
+                targets: 'Урядові портали України, транспортна інфраструктура, логістика, системи зв\'язку.\nВектор: Дефейс сайтів, використання куплених вразливостей, експлуатація слабких паролів.',
+                conclusions: '- Мета: Дестабілізація, психологічний тиск, безповоротне знищення даних напередодні та під час військового вторгнення.\n- Інструменти: WhisperGate (Wiper - деструктивне ПЗ, що маскується під Ransomware).\n- OPSEC: Низький рівень побутової безпеки офіцерів (замовлення їжі на об\'єкти ГРУ, спільні подорожі).\n- Фігуранти (розшук ФБР): Денисов Ю.Ф., Стігал А.Т., Боровков В.Є., Денисенко Д.І., Голошубов Д.Ю., Корчагін М.О.',
+                sources: 'https://www.justice.gov/opa/pr/five-russian-gru-officers-and-one-civilian-wanted-connection-whispergate-cyber-attack\nhttps://www.cisa.gov/news-events/cybersecurity-advisories/aa24-249a\nhttps://attack.mitre.org/groups/G1003/'
+            }
+        };
+
+        function loadAptTemplate(aptId) {
+            const data = aptDatabase[aptId];
+            document.getElementById('repApt').value = data.apt;
+            document.getElementById('repCurator').value = data.curator;
+            document.getElementById('repTargets').value = data.targets;
+            document.getElementById('repConclusions').value = data.conclusions;
+            document.getElementById('repSources').value = data.sources;
+
+            // Switch to builder tab
+            switchTab('report-builder', document.querySelectorAll('.nav-item')[2]);
+        }
+
+        // --- EXPORT LOGIC ---
+        function exportReport(format) {
+            const author = document.getElementById('repAuthor').value || "Не вказано";
+            const tlp = document.getElementById('repTLP').value;
+            const apt = document.getElementById('repApt').value || "Не вказано";
+            const curator = document.getElementById('repCurator').value;
+            const targets = document.getElementById('repTargets').value;
+            const conclusions = document.getElementById('repConclusions').value;
+            const sources = document.getElementById('repSources').value;
+            const date = new Date().toISOString().split('T')[0];
+            const safeAptName = apt.replace(/[^a-z0-9а-яієїґ]/gi, '_').toLowerCase() || 'report';
+
+            let content = '';
+            let mimeType = '';
+            let ext = '';
+
+            if (format === 'txt') {
+                content = `=========================================
+OSINT АНАЛІТИЧНИЙ ЗВІТ (UNDERDEFENSE EVENT)
+=========================================
+ДАТА: ${date} | АВТОР: ${author} | ${tlp}
+
+1. ДОСЛІДЖУВАНЕ УГРУПУВАННЯ
+-----------------------------------------
+Назва/Псевдоніми: ${apt}
+Куратор (Спонсор): ${curator}
+
+2. ЦІЛІ ТА ВЕКТОРИ
+-----------------------------------------
+${targets}
+
+3. АНАЛІТИЧНІ ВИСНОВКИ (MITRE ТТП)
+-----------------------------------------
+${conclusions}
+
+4. ДЖЕРЕЛА
+-----------------------------------------
+${sources}`;
+                mimeType = 'text/plain';
+                ext = 'txt';
+            } else if (format === 'md') {
+                content = ` 🛡️ OSINT Аналітичний Звіт
+
+> Подія: UnderDefense Internal Event 2026
+> Дата: ${date}
+> Автор: **${author}**
+> Класифікація: \`${tlp}\`
+
+🎯 **1. Досліджуване угрупування**
+* Назва / Псевдоніми: ${apt}
+* Куратор (Спонсор): ${curator}
+
+🌍 **2. Цілі та вектори**
+${targets}
+
+🧠 **3. Аналітичні висновки (Індикатори, TTPs, Фігуранти)**
+${conclusions}
+
+🔗 **4. Джерела**
+${sources.split('\n').map(s => s.trim() ? `- ${s}` : '').join('\n')}
+`;
+                mimeType = 'text/markdown';
+                ext = 'md';
+            }
+
+            const blob = new Blob([content], { type: `${mimeType};charset=utf-8;` });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `osint_report_${safeAptName}_${date}.${ext}`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // --- TOOLS CATALOG LOGIC ---
+        const tools = [
+            // IoT Пошуковики (Інфраструктура)
+            { category: "IoT Пошуковики (Інфраструктура)", name: "Shodan", desc: "Найвідоміший пошуковик для підключених до інтернету пристроїв, серверів та відкритих портів.", link: "https://www.shodan.io/" },
+            { category: "IoT Пошуковики (Інфраструктура)", name: "Censys", desc: "Пошуковик серверів, сертифікатів та відкритих портів. Часто знаходить те, що пропускає Shodan.", link: "https://search.censys.io/" },
+            { category: "IoT Пошуковики (Інфраструктура)", name: "FOFA", desc: "Китайський аналог Shodan, надзвичайно потужний для пошуку веб-камер та специфічного ПЗ.", link: "https://fofa.info/" },
+            { category: "IoT Пошуковики (Інфраструктура)", name: "ZoomEye", desc: "Пошукова система для кіберпростору (мережеві компоненти та веб-фреймворки).", link: "https://www.zoomeye.org/" },
+            { category: "IoT Пошуковики (Інфраструктура)", name: "Criminal IP", desc: "Новий пошуковик для оцінки вразливостей IP та аналізу загроз у реальному часі.", link: "https://www.criminalip.io/" },
+            { category: "IoT Пошуковики (Інфраструктура)", name: "Netlas", desc: "Інструмент для пошуку та моніторингу активів в інтернеті з потужним API.", link: "https://netlas.io/" },
+            { category: "IoT Пошуковики (Інфраструктура)", name: "Greynoise", desc: "Аналізує масове сканування інтернету. Допомагає відрізнити цільову атаку від фонового шуму.", link: "https://www.greynoise.io/" },
+
+            // IP, ASN та Маршрутизація
+            { category: "IP, ASN та Маршрутизація", name: "BGP.he.net", desc: "Ультимативний інструмент від Hurricane Electric для аналізу ASN, BGP маршрутів та IPv4/IPv6 підмереж.", link: "https://bgp.he.net/" },
+            { category: "IP, ASN та Маршрутизація", name: "IPinfo.io", desc: "Швидкий пошук інформації по IP, включаючи геолокацію, ASN, провайдера та тип з'єднання.", link: "https://ipinfo.io/" },
+            { category: "IP, ASN та Маршрутизація", name: "Spur.us", desc: "Аналізатор IP для виявлення VPN, проксі, Tor-нод та ботнетів.", link: "https://spur.us/" },
+            { category: "IP, ASN та Маршрутизація", name: "ViewDNS.info", desc: "Reverse IP, історія IP, перевірка китайського фаєрволу та інші DNS утиліти.", link: "https://viewdns.info/" },
+            { category: "IP, ASN та Маршрутизація", name: "BGPView", desc: "Візуалізація BGP анонсів, пошук ASN та префіксів у реальному часі.", link: "https://bgpview.io/" },
+
+            // Репутація IP та Threat Intel
+            { category: "Репутація IP та Threat Intel", name: "AbuseIPDB", desc: "Перевірка IP-адреси на участь у спамі, DDoS-атаках або брутфорсі.", link: "https://www.abuseipdb.com/" },
+            { category: "Репутація IP та Threat Intel", name: "VirusTotal", desc: "Базовий інструмент для перевірки IP, доменів та файлів по десятках антивірусних баз.", link: "https://www.virustotal.com/" },
+            { category: "Репутація IP та Threat Intel", name: "AlienVault OTX", desc: "Відкрита платформа кіберрозвідки (IoC, IP, домени, пов'язані з APT).", link: "https://otx.alienvault.com/" },
+            { category: "Репутація IP та Threat Intel", name: "URLhaus", desc: "База даних шкідливих URL-адрес та серверів роздачі вірусів.", link: "https://urlhaus.abuse.ch/" },
+
+            // DNS, Домени та Субдомени
+            { category: "DNS, Домени та Субдомени", name: "SecurityTrails", desc: "Потужний API для історії DNS та збору субдоменів.", link: "https://securitytrails.com/" },
+            { category: "DNS, Домени та Субдомени", name: "DNSDumpster", desc: "Інструмент для виявлення хостів та візуалізації графу доменної інфраструктури.", link: "https://dnsdumpster.com/" },
+            { category: "DNS, Домени та Субдомени", name: "Subfinder", desc: "Швидкий пасивний інструмент від ProjectDiscovery для виявлення субдоменів.", link: "https://github.com/projectdiscovery/subfinder" },
+
+            // Сканери Портів та Мереж
+            { category: "Сканери Портів та Мереж", name: "Nmap", desc: "Золотий стандарт мережевого сканування, визначення версій сервісів та ОС.", link: "https://nmap.org/" },
+            { category: "Сканери Портів та Мереж", name: "Masscan", desc: "Найшвидший асинхронний сканер портів. Здатен просканувати весь інтернет за 6 хвилин.", link: "https://github.com/robertdavidgraham/masscan" },
+
+            // Веб-розвідка (Web Recon)
+            { category: "Веб-розвідка (Web Recon)", name: "BuiltWith", desc: "Визначає технологічний стек вебсайту (CMS, аналітика, сервери, фреймворки).", link: "https://builtwith.com/" },
+            { category: "Веб-розвідка (Web Recon)", name: "Wayback Machine", desc: "Пошук архівних копій сайтів. Іноді містить старі ключі API та забуті сторінки.", link: "https://archive.org/web/" },
+
+            // Автоматизація та Фреймворки
+            { category: "Автоматизація та Фреймворки", name: "Maltego", desc: "Професійний інструмент для візуалізації графів зв'язків між IP, доменами та людьми.", link: "https://www.maltego.com/" },
+            { category: "Автоматизація та Фреймворки", name: "SpiderFoot", desc: "Автоматизує OSINT, опитуючи понад 100 API (DNS, IP, витоки, Threat Intel).", link: "https://www.spiderfoot.net/" },
+
+            // Email та Ідентифікація
+            { category: "Email та Ідентифікація", name: "Hunter.io", desc: "Пошук email-адрес співробітників за доменним ім'ям компанії.", link: "https://hunter.io/" },
+            { category: "Email та Ідентифікація", name: "Have I Been Pwned", desc: "Перевірка email та номерів на компрометацію у відомих витоках.", link: "https://haveibeenpwned.com/" }
+        ];
+
+        const catalog = document.getElementById('catalogContainer');
+        const searchInput = document.getElementById('searchInput');
+
+        function displayTools(toolsToDisplay) {
+            catalog.innerHTML = '';
+            toolsToDisplay.forEach(tool => {
+                catalog.innerHTML += `
+                    <div class="card" style="padding: 15px;">
+                        <h3 style="font-size: 15px; margin-bottom: 5px;">${tool.name}</h3>
+                        <p style="font-size: 13px; margin-bottom: 10px; color: var(--accent);">${tool.category}</p>
+                        <p style="font-size: 13px; margin-bottom: 10px;">${tool.desc}</p>
+                        <a href="${tool.link}" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 13px; font-family: monospace;">Open Tool ↗</a>
+                    </div>`;
+            });
+        }
+
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            displayTools(tools.filter(t => t.name.toLowerCase().includes(term) || t.desc.toLowerCase().includes(term) || t.category.toLowerCase().includes(term)));
+        });
+
+        displayTools(tools);
+    </script>
+</body>
+</html>
