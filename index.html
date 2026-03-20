@@ -25,7 +25,6 @@
             background-size: 40px 40px;
         }
 
-        /* Sidebar Navigation */
         .sidebar {
             width: 300px; background: linear-gradient(180deg, var(--bg-panel) 0%, var(--bg-base) 100%);
             border-right: 1px solid var(--border); display: flex; flex-direction: column;
@@ -44,12 +43,10 @@
         .nav-item:hover { background-color: rgba(0, 229, 255, 0.05); color: var(--text-main); padding-left: 30px; }
         .nav-item.active { color: var(--ud-cyan); border-left: 3px solid var(--ud-cyan); background: linear-gradient(90deg, rgba(0, 229, 255, 0.1) 0%, transparent 100%); }
 
-        /* Main Content */
         .main-content { flex: 1; overflow-y: auto; padding: 30px 45px; scroll-behavior: smooth; }
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg-base); }
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
         .tab-content { display: none; animation: fadeIn 0.3s ease; }
         .tab-content.active { display: block; }
@@ -57,7 +54,6 @@
 
         h2.section-title { font-family: 'JetBrains Mono', monospace; font-size: 24px; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; color: #fff; }
 
-        /* Grids & Cards */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
         .card { background-color: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 20px; box-shadow: var(--shadow); display: flex; flex-direction: column; transition: all 0.2s ease; position: relative; overflow: hidden; }
         .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: var(--ud-cyan); transform: scaleX(0); transform-origin: left; transition: transform 0.3s ease; }
@@ -70,32 +66,35 @@
         .btn:hover { background-color: var(--border); color: #fff; }
         .btn-primary { background-color: var(--ud-cyan); color: var(--bg-base); border-color: var(--ud-cyan); }
         .btn-primary:hover { background-color: var(--ud-cyan-hover); box-shadow: var(--glow); color: var(--bg-base); }
+        .btn-sm { padding: 6px 12px; font-size: 10px; }
 
-        /* Panels & Forms */
         .search-panel { background: var(--bg-card); padding: 25px; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 25px;}
         .search-panel h3 { margin-bottom: 15px; font-family: 'JetBrains Mono', monospace; color: var(--ud-cyan); font-size: 15px;}
-        .search-panel input, .search-panel textarea { width: 100%; padding: 14px; border-radius: 4px; border: 1px solid var(--border); background-color: rgba(0,0,0,0.3); color: #fff; font-size: 14px; font-family: monospace; margin-bottom: 15px;}
+        .search-panel input, .search-panel textarea, .search-panel select { width: 100%; padding: 14px; border-radius: 4px; border: 1px solid var(--border); background-color: rgba(0,0,0,0.3); color: #fff; font-size: 14px; font-family: monospace; margin-bottom: 15px; box-sizing: border-box;}
         .search-panel input:focus, .search-panel textarea:focus { outline: none; border-color: var(--ud-cyan); box-shadow: 0 0 0 2px rgba(0, 229, 255, 0.1); }
         .btn-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
         
         .output-box { background: #060913; border: 1px solid var(--border); padding: 15px; border-radius: 4px; color: var(--success); font-family: monospace; font-size: 13px; min-height: 80px; white-space: pre-wrap; word-break: break-all;}
 
-        /* Iframes */
         .iframe-container { width: 100%; height: calc(100vh - 180px); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; background-color: #0b0f19; box-shadow: var(--shadow); }
         .iframe-container iframe { width: 100%; height: 100%; border: none; }
 
-        /* SOC Dashboard Specifics */
-        .soc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 20px; }
-        .soc-stat { background: var(--bg-card); border: 1px solid var(--border); padding: 20px; border-radius: 6px; text-align: center; border-top: 3px solid var(--ud-cyan);}
-        .soc-stat.danger { border-top-color: var(--danger); }
-        .soc-stat.warning { border-top-color: var(--warning); }
-        .soc-stat h4 { color: var(--text-muted); font-size: 12px; text-transform: uppercase; margin-bottom: 10px; font-family: 'JetBrains Mono', monospace;}
-        .soc-stat .val { font-size: 32px; color: #fff; font-weight: 700; font-family: 'JetBrains Mono', monospace;}
-        
-        .soc-log { background: #000; padding: 15px; border: 1px solid var(--border); border-radius: 6px; font-family: monospace; font-size: 12px; color: var(--success); height: 300px; overflow-y: auto;}
-        .log-line { margin-bottom: 5px; border-bottom: 1px dashed #111; padding-bottom: 5px;}
+        .soc-log { background: #000; padding: 15px; border: 1px solid var(--border); border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--success); height: 500px; overflow-y: auto;}
+        .log-line { margin-bottom: 8px; border-bottom: 1px dashed #222; padding-bottom: 8px; line-height: 1.4;}
         .log-warn { color: var(--warning); }
         .log-err { color: var(--danger); }
+        .log-link { color: var(--ud-cyan); text-decoration: none; }
+        .log-link:hover { text-decoration: underline; }
+        
+        /* Table for Native Trackers */
+        .data-table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
+        .data-table th { background-color: var(--border); color: var(--ud-cyan); padding: 12px; font-family: monospace; }
+        .data-table td { padding: 12px; border-bottom: 1px solid var(--border); color: var(--text-main); }
+        .status-up { color: var(--success); font-weight: bold; }
+        .status-down { color: var(--danger); font-weight: bold; }
+
+        .form-row { display: flex; gap: 20px; }
+        .form-row .form-group { flex: 1; }
     </style>
 </head>
 <body>
@@ -107,13 +106,13 @@
         </div>
 
         <div class="nav-category">SOC Operations</div>
-        <div class="nav-item active" onclick="switchTab('ud-soc', this)">🛡️ UD SOC Dashboard</div>
+        <div class="nav-item active" onclick="switchTab('ud-soc', this)">🛡️ Live Exploits (SIEM)</div>
         <div class="nav-item" onclick="switchTab('apt-db', this)">🎯 База знань APT</div>
         <div class="nav-item" onclick="switchTab('threat-map', this)">🗺️ Live Threat Map</div>
-        <div class="nav-item" onclick="switchTab('ransom-tracker', this)">📡 Ransomwatch DLS</div>
+        <div class="nav-item" onclick="switchTab('ransom-tracker', this)">📡 Ransomware DLS Tracker</div>
         
         <div class="nav-category">Active Threat Intel</div>
-        <div class="nav-item" onclick="switchTab('threat-fox', this)">🦠 ThreatFox (IoC)</div>
+        <div class="nav-item" onclick="switchTab('cloudflare-radar', this)">🌍 Cloudflare Radar (IoC)</div>
         <div class="nav-item" onclick="switchTab('mitre-attack', this)">🧩 MITRE ATT&CK Matrix</div>
         <div class="nav-item" onclick="switchTab('cve-search', this)">🛡️ CVE / Vulmon</div>
 
@@ -123,24 +122,19 @@
         <div class="nav-item" onclick="switchTab('dns-scan', this)">🌐 DNS Аналізатор (API)</div>
         <div class="nav-item" onclick="switchTab('whois-sub', this)">📇 WHOIS & Субдомени</div>
         <div class="nav-item" onclick="switchTab('bgp-view', this)">🌍 BGP & ASN Розвідка</div>
-        <div class="nav-item" onclick="switchTab('mac-lookup', this)">📱 MAC Vendor Lookup</div>
 
         <div class="nav-category">Web & Phishing Intel</div>
         <div class="nav-item" onclick="switchTab('phishing-chk', this)">🎣 URL & Phishing Аналіз</div>
-        <div class="nav-item" onclick="switchTab('wayback', this)">🗃️ Archive Time Machine</div>
         <div class="nav-item" onclick="switchTab('social-osint', this)">🕵️‍♂️ Email & Social OSINT</div>
 
         <div class="nav-category">GEOINT & Physical</div>
         <div class="nav-item" onclick="switchTab('flight-track', this)">✈️ ADS-B Flight Tracker</div>
         <div class="nav-item" onclick="switchTab('vessel-track', this)">🚢 Marine / Vessel Tracker</div>
-        <div class="nav-item" onclick="switchTab('nasa-firms', this)">🛰️ NASA FIRMS (Пожежі)</div>
-        <div class="nav-item" onclick="switchTab('suncalc', this)">☀️ SunCalc (Тіні/Сонце)</div>
+        <div class="nav-item" onclick="switchTab('nasa-firms', this)">🛰️ Zoom.Earth (GEOINT)</div>
 
         <div class="nav-category">Crypto & Utils</div>
         <div class="nav-item" onclick="switchTab('cyberchef', this)">🔪 CyberChef (Декодер)</div>
-        <div class="nav-item" onclick="switchTab('enc-dec', this)">🧾 Base64/URL Encoder</div>
-        <div class="nav-item" onclick="switchTab('hash-gen', this)">🔐 Hash Генератор</div>
-        <div class="nav-item" onclick="switchTab('pwd-gen', this)">🔑 Password & Token Gen</div>
+        <div class="nav-item" onclick="switchTab('enc-dec', this)">🧾 Base64 & Hashing</div>
 
         <div class="nav-category">Reporting & Frameworks</div>
         <div class="nav-item" onclick="switchTab('osint-framework', this)">🕸️ OSINT Framework</div>
@@ -151,17 +145,16 @@
     <main class="main-content">
 
         <section id="ud-soc" class="tab-content active">
-            <h2 class="section-title">🛡️ UnderDefense SOC Monitor <span>🟢 L1 Analyst View</span></h2>
-            <div class="soc-grid">
-                <div class="soc-stat danger"><h4>Критичні інциденти</h4><div class="val">3</div></div>
-                <div class="soc-stat warning"><h4>Підозрілий трафік (Mb/s)</h4><div class="val">842</div></div>
-                <div class="soc-stat"><h4>Заблоковано IP (24h)</h4><div class="val">14,205</div></div>
-                <div class="soc-stat"><h4>DDoS Mitigation</h4><div class="val" style="color: var(--success);">ACTIVE</div></div>
-            </div>
-            <div class="search-panel">
-                <h3>[LIVE] Firewall & SIEM Logs</h3>
+            <h2 class="section-title">🛡️ Live CVE Exploit Monitor <span>🟢 REAL-TIME API FEED</span></h2>
+            <div class="search-panel" style="margin-bottom: 15px;">
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Цей модуль автоматично опитує публічне API GitHub і виводить у реальному часі логи про публікацію нових експлойтів та PoC для вразливостей (CVE).</p>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
+                    <h3 style="margin:0;">[LIVE] Security Operations Center Feed</h3>
+                    <button class="btn btn-sm btn-primary" onclick="fetchLiveCVELogs()">Обновити логи вручну</button>
+                </div>
                 <div class="soc-log" id="siem-logs">
-                    </div>
+                    <div style="color: var(--text-muted);">> Ініціалізація підключення до API...</div>
+                </div>
             </div>
         </section>
 
@@ -171,14 +164,26 @@
                 <div class="card">
                     <h3>Cl0p (TA505)</h3>
                     <p>Еволюціонували від шифрувальників до Data-only extortion. Відмивають кошти через Binance, EXMO. Фігуранти: Котенко І.</p>
+                    <div style="display:flex; gap:10px; margin-top: 15px;">
+                        <button class="btn btn-sm" onclick="downloadAptData('Cl0p_TA505', 'txt')">TXT</button>
+                        <button class="btn btn-sm btn-primary" onclick="downloadAptData('Cl0p_TA505', 'json')">JSON</button>
+                    </div>
                 </div>
                 <div class="card">
                     <h3>Energetic Bear (ФСБ)</h3>
                     <p>Кібершпигунство та атаки на Supply Chain. Мета — саботаж в мережах критичної інфраструктури (ICS/SCADA).</p>
+                    <div style="display:flex; gap:10px; margin-top: 15px;">
+                        <button class="btn btn-sm" onclick="downloadAptData('Energetic_Bear', 'txt')">TXT</button>
+                        <button class="btn btn-sm btn-primary" onclick="downloadAptData('Energetic_Bear', 'json')">JSON</button>
+                    </div>
                 </div>
                 <div class="card">
                     <h3>Ember Bear (ГРУ)</h3>
                     <p>Використовують деструктивне ПЗ (WhisperGate wiper), маскуючи його під Ransomware. Мета — знищення даних.</p>
+                    <div style="display:flex; gap:10px; margin-top: 15px;">
+                        <button class="btn btn-sm" onclick="downloadAptData('Ember_Bear', 'txt')">TXT</button>
+                        <button class="btn btn-sm btn-primary" onclick="downloadAptData('Ember_Bear', 'json')">JSON</button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -189,13 +194,28 @@
         </section>
 
         <section id="ransom-tracker" class="tab-content">
-            <h2 class="section-title">📡 Ransomwatch Tracker <a href="https://ransomwatch.telemetry.ltd/" target="_blank" class="btn btn-primary">Відкрити ↗</a></h2>
-            <div class="iframe-container" style="background-color: #0b0f19;"><iframe src="https://ransomwatch.telemetry.ltd/"></iframe></div>
+            <h2 class="section-title">📡 Ransomware DLS Tracker (Native) <a href="https://ransomwatch.telemetry.ltd/" target="_blank" class="btn btn-primary">Відкрити Ransomwatch ↗</a></h2>
+            <div class="search-panel">
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Оскільки більшість трекерів DLS (Data Leak Sites) блокують iframes з метою безпеки, нижче наведено локальний монітор активності ключових груп з прямими посиланнями.</p>
+                <table class="data-table">
+                    <thead>
+                        <tr><th>Угруповання</th><th>Тип</th><th>Onion/Tor Дзеркало (DLS)</th><th>Статус</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>LockBit 3.0</td><td>Ransomware</td><td>lockbitapt...onion</td><td class="status-up">Активний</td></tr>
+                        <tr><td>Cl0p</td><td>Data Extortion</td><td>clop...onion</td><td class="status-down">Неактивний / Заблоковано</td></tr>
+                        <tr><td>Play</td><td>Ransomware</td><td>play...onion</td><td class="status-up">Активний</td></tr>
+                        <tr><td>BlackBasta</td><td>Ransomware</td><td>basta...onion</td><td class="status-up">Активний</td></tr>
+                        <tr><td>RansomHub</td><td>Ransomware</td><td>ransomhub...onion</td><td class="status-up">Активний</td></tr>
+                        <tr><td>Akira</td><td>Ransomware</td><td>akira...onion</td><td class="status-up">Активний</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </section>
 
-        <section id="threat-fox" class="tab-content">
-            <h2 class="section-title">🦠 ThreatFox (IoC Database) <a href="https://threatfox.abuse.ch/" target="_blank" class="btn btn-primary">Відкрити ↗</a></h2>
-            <div class="iframe-container" style="background-color: #fff;"><iframe src="https://threatfox.abuse.ch/"></iframe></div>
+        <section id="cloudflare-radar" class="tab-content">
+            <h2 class="section-title">🌍 Cloudflare Radar (Threat Intel) <a href="https://radar.cloudflare.com/security-and-attacks" target="_blank" class="btn btn-primary">Повний екран ↗</a></h2>
+            <div class="iframe-container" style="background-color: #fff;"><iframe src="https://radar.cloudflare.com/security-and-attacks"></iframe></div>
         </section>
 
         <section id="mitre-attack" class="tab-content">
@@ -265,7 +285,6 @@
                     <button class="btn" onclick="openTool('whois', 'whoisInput')">DomainTools (WHOIS)</button>
                     <button class="btn" onclick="openTool('crtsh', 'whoisInput')">CRT.sh (Субдомени)</button>
                     <button class="btn" onclick="openTool('dnsdump', 'whoisInput')">DNSDumpster</button>
-                    <button class="btn" onclick="openTool('bgpview_domain', 'whoisInput')">BGPView</button>
                 </div>
             </div>
         </section>
@@ -273,17 +292,6 @@
         <section id="bgp-view" class="tab-content">
             <h2 class="section-title">🌍 BGP & ASN Розвідка <a href="https://bgp.he.net/" target="_blank" class="btn btn-primary">Відкрити ↗</a></h2>
             <div class="iframe-container" style="background-color: #fff;"><iframe src="https://bgp.he.net/"></iframe></div>
-        </section>
-
-        <section id="mac-lookup" class="tab-content">
-            <h2 class="section-title">📱 MAC Address Vendor Lookup</h2>
-            <div class="search-panel">
-                <h3>Введіть MAC-адресу</h3>
-                <input type="text" id="macInput" placeholder="00:1A:2B:3C:4D:5E">
-                <button class="btn btn-primary" onclick="fetchMAC()">Ідентифікувати виробника</button>
-                <h3 style="margin-top:20px;">Результат:</h3>
-                <div class="output-box" id="macOutput">> Очікування запиту...</div>
-            </div>
         </section>
 
         <section id="phishing-chk" class="tab-content">
@@ -298,22 +306,13 @@
             </div>
         </section>
 
-        <section id="wayback" class="tab-content">
-            <h2 class="section-title">🗃️ Archive Time Machine</h2>
-            <div class="search-panel">
-                <h3>Відновити видалену або стару сторінку</h3>
-                <input type="text" id="waybackInput" placeholder="https://example.com/hidden-page">
-                <button class="btn btn-primary" onclick="openTool('wayback', 'waybackInput')">Відкрити в Wayback Machine</button>
-            </div>
-        </section>
-
         <section id="social-osint" class="tab-content">
             <h2 class="section-title">🕵️‍♂️ Email, Phone & Social OSINT</h2>
             <div class="search-panel">
                 <h3>Введіть Email, Нікнейм або Номер телефону</h3>
                 <input type="text" id="socialInput" placeholder="eucerinn або +38099...">
                 <div class="btn-grid">
-                    <button class="btn" onclick="openTool('epieos', 'socialInput')">Epieos (Email -> Google)</button>
+                    <button class="btn" onclick="openTool('epieos', 'socialInput')">Epieos (Email)</button>
                     <button class="btn" onclick="openTool('whatsmyname', 'socialInput')">WhatsMyName (Нікнейм)</button>
                     <button class="btn" onclick="openTool('syncme', 'socialInput')">Sync.Me (Телефон)</button>
                 </div>
@@ -326,18 +325,13 @@
         </section>
 
         <section id="vessel-track" class="tab-content">
-            <h2 class="section-title">🚢 Marine Traffic (Морська розвідка) <a href="https://www.vesselfinder.com/" target="_blank" class="btn btn-primary">Відкрити ↗</a></h2>
-            <div class="iframe-container" style="background-color: #fff;"><iframe src="https://www.vesselfinder.com/"></iframe></div>
+            <h2 class="section-title">🚢 Marine Traffic (Морська розвідка) <a href="https://www.marinetraffic.com/" target="_blank" class="btn btn-primary">Відкрити ↗</a></h2>
+            <div class="iframe-container" style="background-color: #fff;"><iframe src="https://www.marinetraffic.com/en/ais/embed"></iframe></div>
         </section>
 
         <section id="nasa-firms" class="tab-content">
-            <h2 class="section-title">🛰️ NASA FIRMS (Супутникові теплові аномалії) <a href="https://firms.modaps.eosdis.nasa.gov/map/" target="_blank" class="btn btn-primary">Відкрити ↗</a></h2>
-            <div class="iframe-container" style="background-color: #fff;"><iframe src="https://firms.modaps.eosdis.nasa.gov/map/"></iframe></div>
-        </section>
-
-        <section id="suncalc" class="tab-content">
-            <h2 class="section-title">☀️ SunCalc (GEOINT аналіз тіней) <a href="https://www.suncalc.org/" target="_blank" class="btn btn-primary">Відкрити ↗</a></h2>
-            <div class="iframe-container" style="background-color: #fff;"><iframe src="https://www.suncalc.org/"></iframe></div>
+            <h2 class="section-title">🛰️ Zoom.Earth (Супутникова OSINT розвідка) <a href="https://zoom.earth/" target="_blank" class="btn btn-primary">Відкрити ↗</a></h2>
+            <div class="iframe-container" style="background-color: #fff;"><iframe src="https://zoom.earth/maps/satellite/"></iframe></div>
         </section>
 
         <section id="cyberchef" class="tab-content">
@@ -346,40 +340,16 @@
         </section>
 
         <section id="enc-dec" class="tab-content">
-            <h2 class="section-title">🧾 Base64 & URL Encoder/Decoder</h2>
+            <h2 class="section-title">🧾 Base64 & Hashing Utility</h2>
             <div class="search-panel">
-                <textarea id="encodeInput" placeholder="Введіть текст або код..."></textarea>
+                <textarea id="cryptoInput" placeholder="Введіть текст для кодування/хешування..."></textarea>
                 <div class="btn-grid" style="margin-bottom: 20px;">
-                    <button class="btn btn-primary" onclick="doEncode('b64e')">Base64 Encode</button>
-                    <button class="btn" onclick="doEncode('b64d')">Base64 Decode</button>
-                    <button class="btn btn-primary" onclick="doEncode('urle')">URL Encode</button>
-                    <button class="btn" onclick="doEncode('urld')">URL Decode</button>
+                    <button class="btn btn-primary" onclick="doCrypto('b64e')">Base64 Encode</button>
+                    <button class="btn" onclick="doCrypto('b64d')">Base64 Decode</button>
+                    <button class="btn btn-primary" onclick="generateHash('SHA-256')">SHA-256 Hash</button>
+                    <button class="btn btn-primary" onclick="generateHash('MD5')">MD5 Hash</button>
                 </div>
-                <div class="output-box" id="encodeOutput">> Результат з'явиться тут...</div>
-            </div>
-        </section>
-
-        <section id="hash-gen" class="tab-content">
-            <h2 class="section-title">🔐 Hash Generator (Web Crypto API)</h2>
-            <div class="search-panel">
-                <textarea id="hashInput" placeholder="Введіть рядок для хешування..."></textarea>
-                <div class="btn-grid" style="margin-bottom: 20px;">
-                    <button class="btn btn-primary" onclick="generateHash('SHA-1')">SHA-1</button>
-                    <button class="btn btn-primary" onclick="generateHash('SHA-256')">SHA-256</button>
-                    <button class="btn btn-primary" onclick="generateHash('SHA-512')">SHA-512</button>
-                </div>
-                <div class="output-box" id="hashOutput">> Згенеруйте хеш...</div>
-            </div>
-        </section>
-
-        <section id="pwd-gen" class="tab-content">
-            <h2 class="section-title">🔑 Secure Password & Token Generator</h2>
-            <div class="search-panel">
-                <div class="btn-grid" style="margin-bottom: 20px;">
-                    <button class="btn btn-primary" onclick="genPassword(16)">Генерувати Пароль (16 симв)</button>
-                    <button class="btn" onclick="genPassword(32)">Генерувати API Token (32 симв)</button>
-                </div>
-                <div class="output-box" id="pwdOutput" style="font-size: 18px; text-align: center; padding: 25px;">> Натисніть кнопку</div>
+                <div class="output-box" id="cryptoOutput">> Результат з'явиться тут...</div>
             </div>
         </section>
 
@@ -390,7 +360,7 @@
 
         <section id="tools-catalog" class="tab-content">
             <h2 class="section-title">🛠️ Каталог інструментів кіберрозвідки</h2>
-            <div class="search-panel"><input type="text" id="searchInputCatalog" placeholder="Пошук (напр. 'Shodan')..."></div>
+            <div class="search-panel"><input type="text" id="searchInputCatalog" placeholder="Шукати інструмент (напр. 'Shodan', 'Email')..."></div>
             <div id="catalogContainer" class="grid"></div>
         </section>
 
@@ -417,7 +387,6 @@
                 </div>
                 <div class="form-group"><label>Цілі та вектори атаки:</label><textarea id="repTargets"></textarea></div>
                 <div class="form-group"><label>Аналітичні висновки (TTPs):</label><textarea id="repConclusions"></textarea></div>
-                <div class="form-group"><label>Посилання на джерела:</label><textarea id="repSources"></textarea></div>
                 <div class="btn-grid">
                     <button class="btn" onclick="exportReport('txt')">📄 Завантажити .TXT</button>
                     <button class="btn btn-primary" onclick="exportReport('md')">📝 Завантажити .MD</button>
@@ -455,28 +424,27 @@
                 'whois': `https://whois.domaintools.com/${val}`,
                 'crtsh': `https://crt.sh/?q=%25.${val}`,
                 'dnsdump': `https://dnsdumpster.com/`,
-                'bgpview_domain': `https://bgpview.io/search/${val}`,
                 'urlscan': `https://urlscan.io/search/#${val}`,
                 'hybrid': `https://www.hybrid-analysis.com/search?query=${val}`,
                 'wayback': `https://web.archive.org/web/*/${val}`,
                 'epieos': `https://epieos.com/?q=${val}`,
-                'whatsmyname': `https://whatsmyname.app/?q=${val}`,
-                'syncme': `https://sync.me/search/?number=${val}`
+                'whatsmyname': `https://whatsmyname.app/?q=${val}`
             };
             if(urls[tool]) window.open(urls[tool], '_blank');
         }
 
-        // --- CUSTOM API JS TOOLS ---
+        // --- API JS TOOLS ---
         async function fetchIPGeo() {
             const ip = document.getElementById('ipInput').value.trim();
             const out = document.getElementById('ipOutput');
             if(!ip) return out.innerText = '> Введіть IP';
             out.innerText = '> Завантаження...';
             try {
+                // Використовуємо надійний freeipapi без жорстких CORS лімітів
                 const res = await fetch(`https://freeipapi.com/api/json/${ip}`);
                 const data = await res.json();
                 out.innerText = JSON.stringify(data, null, 2);
-            } catch (e) { out.innerText = '> Помилка API або AdBlocker блокує запит.'; }
+            } catch (e) { out.innerText = '> Помилка запиту.'; }
         }
 
         async function fetchDNS() {
@@ -485,39 +453,32 @@
             if(!domain) return out.innerText = '> Введіть домен';
             out.innerText = '> Завантаження...';
             try {
+                // Google DNS API (надійний)
                 const res = await fetch(`https://dns.google/resolve?name=${domain}&type=ANY`);
                 const data = await res.json();
                 out.innerText = JSON.stringify(data.Answer || data, null, 2);
             } catch (e) { out.innerText = '> Помилка запиту.'; }
         }
 
-        async function fetchMAC() {
-            const mac = document.getElementById('macInput').value.trim();
-            const out = document.getElementById('macOutput');
-            if(!mac) return out.innerText = '> Введіть MAC';
-            out.innerText = '> Завантаження...';
-            try {
-                const res = await fetch(`https://api.maclookup.app/v2/macs/${mac}`);
-                const data = await res.json();
-                out.innerText = `[+] Vendor: ${data.company || 'Не знайдено'}`;
-            } catch (e) { out.innerText = '> Не знайдено або помилка (CORS).'; }
-        }
-
-        function doEncode(type) {
-            let val = document.getElementById('encodeInput').value;
-            let out = document.getElementById('encodeOutput');
+        function doCrypto(type) {
+            let val = document.getElementById('cryptoInput').value;
+            let out = document.getElementById('cryptoOutput');
             try {
                 if(type === 'b64e') out.innerText = btoa(unescape(encodeURIComponent(val)));
                 if(type === 'b64d') out.innerText = decodeURIComponent(escape(atob(val)));
-                if(type === 'urle') out.innerText = encodeURIComponent(val);
-                if(type === 'urld') out.innerText = decodeURIComponent(val);
             } catch(e) { out.innerText = '> Помилка формату даних.'; }
         }
 
         async function generateHash(algo) {
-            let val = document.getElementById('hashInput').value;
-            let out = document.getElementById('hashOutput');
+            let val = document.getElementById('cryptoInput').value;
+            let out = document.getElementById('cryptoOutput');
             if(!val) return out.innerText = '> Порожній рядок';
+            
+            if(algo === 'MD5') {
+                out.innerText = "> MD5 не підтримується нативно в Web Crypto API. Використовуйте CyberChef.";
+                return;
+            }
+            
             const msgBuffer = new TextEncoder().encode(val);
             const hashBuffer = await crypto.subtle.digest(algo, msgBuffer);
             const hashArray = Array.from(new Uint8Array(hashBuffer));
@@ -525,34 +486,50 @@
             out.innerText = `[${algo}] ${hashHex}`;
         }
 
-        function genPassword(len) {
-            const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+~`|}{[]:;?><,./-=";
-            let retVal = "";
-            for (let i = 0, n = charset.length; i < len; ++i) {
-                retVal += charset.charAt(Math.floor(Math.random() * n));
-            }
-            document.getElementById('pwdOutput').innerText = retVal;
-        }
-
-        // --- MOCK SOC DASHBOARD LOGIC ---
-        const logs = [
-            "[+] 17:20:01 - SUCCESS - SSH Login (root) from 192.168.1.45",
-            "<span class='log-warn'>[!] 17:20:15 - WARN - Multiple failed logins from 45.133.x.x</span>",
-            "<span class='log-err'>[X] 17:21:02 - ALERT - SQL Injection payload detected on /api/login</span>",
-            "[+] 17:21:05 - INFO - Firewall rule blocked IP 45.133.x.x",
-            "<span class='log-warn'>[!] 17:22:10 - WARN - High outbound traffic on Port 53 (Possible DNS Tunneling)</span>",
-            "<span class='log-err'>[X] 17:23:45 - CRITICAL - EDR detected malicious powershell.exe execution on WS-004</span>",
-            "[+] 17:24:00 - INFO - SOC Automation isolated WS-004 from network."
-        ];
-        let logIndex = 0;
-        setInterval(() => {
+        // --- СХОЖЕ НА СИСТЕМУ SOC: ПАРСЕР LIVE CVE З GITHUB ---
+        async function fetchLiveCVELogs() {
             const box = document.getElementById('siem-logs');
-            if(!box) return;
-            box.innerHTML = `<div class='log-line'>${logs[logIndex]}</div>` + box.innerHTML;
-            logIndex = (logIndex + 1) % logs.length;
-        }, 3500);
+            box.innerHTML = "<div style='color: var(--text-muted);'>> Опитування API Github (Live CVEs)...</div>";
+            try {
+                // Шукаємо свіжі експлойти по тегу CVE
+                const res = await fetch('https://api.github.com/search/repositories?q=CVE-2025+OR+CVE-2024&sort=updated&order=desc&per_page=15');
+                const data = await res.json();
+                box.innerHTML = '';
+                if(data.items && data.items.length > 0) {
+                    data.items.forEach(item => {
+                        const time = new Date(item.updated_at).toLocaleTimeString();
+                        box.innerHTML += `
+                            <div class='log-line'>
+                                [${time}] <span class='log-err'>[EXPLOIT DETECTED]</span> 
+                                Repo: <strong>${item.name}</strong> <br>
+                                > <a href="${item.html_url}" target="_blank" class="log-link">${item.html_url}</a>
+                            </div>`;
+                    });
+                } else {
+                    box.innerHTML = "<div style='color: var(--warning);'>> Нових експлойтів не знайдено.</div>";
+                }
+            } catch(e) {
+                box.innerHTML = "<div class='log-err'>[!] Помилка з'єднання з API Github (Можливий Rate Limit). Спробуйте пізніше.</div>";
+            }
+        }
+        
+        // Виклик при завантаженні
+        setTimeout(fetchLiveCVELogs, 1000);
 
         // --- EXPORT LOGIC ---
+        function downloadAptData(aptName, format) {
+            const data = {
+                "Cl0p_TA505": { name: "Cl0p (TA505)", target: "MFT Servers", type: "Cybercrime" },
+                "Energetic_Bear": { name: "Energetic Bear", target: "ICS/SCADA", type: "FSB" },
+                "Ember_Bear": { name: "Ember Bear", target: "Ukraine Gov", type: "GRU" }
+            };
+            
+            let content = format === 'json' ? JSON.stringify(data[aptName], null, 2) : `APT: ${data[aptName].name}\nType: ${data[aptName].type}\nTarget: ${data[aptName].target}`;
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8;' });
+            const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = `${aptName}_db.${format}`;
+            document.body.appendChild(link); link.click(); document.body.removeChild(link);
+        }
+
         function exportReport(format) {
             const author = document.getElementById('repAuthor').value || "Ілля Ващук";
             const tlp = document.getElementById('repTLP').value;
@@ -563,6 +540,67 @@
             const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = `ud_report.txt`;
             document.body.appendChild(link); link.click(); document.body.removeChild(link);
         }
+
+        // --- FULL TOOLS CATALOG ---
+        const tools = [
+            { category: "Threat Maps", name: "Bitdefender Threat Map", desc: "Карта глобальних інфекцій та кібератак.", link: "https://threatmap.bitdefender.com/" },
+            { category: "Threat Maps", name: "Check Point Threat Map", desc: "Live-мапа кібератак у реальному часі.", link: "https://threatmap.checkpoint.com/" },
+            { category: "Threat Maps", name: "Netscout Horizon", desc: "Мапа світових DDoS-атак.", link: "https://horizon.netscout.com/" },
+
+            { category: "IoT Пошуковики", name: "Shodan", desc: "Найвідоміший пошуковик пристроїв.", link: "https://www.shodan.io/" },
+            { category: "IoT Пошуковики", name: "Censys", desc: "Пошуковик серверів, сертифікатів.", link: "https://search.censys.io/" },
+            { category: "IoT Пошуковики", name: "FOFA", desc: "Китайський пошуковик, потужний для вебкамер.", link: "https://fofa.info/" },
+            { category: "IoT Пошуковики", name: "ZoomEye", desc: "Пошукова система мережевих компонентів.", link: "https://www.zoomeye.org/" },
+            { category: "IoT Пошуковики", name: "LeakIX", desc: "Індексує відкриті бази даних та витоки.", link: "https://leakix.net/" },
+            { category: "IoT Пошуковики", name: "Netlas", desc: "Пошук та моніторинг активів в інтернеті.", link: "https://netlas.io/" },
+
+            { category: "IP & ASN Розвідка", name: "BGP.he.net", desc: "Аналіз ASN та BGP маршрутів.", link: "https://bgp.he.net/" },
+            { category: "IP & ASN Розвідка", name: "IPinfo", desc: "Швидкий пошук інформації по IP.", link: "https://ipinfo.io/" },
+            { category: "IP & ASN Розвідка", name: "Spur.us", desc: "Аналізатор IP (VPN, Tor, Proxy).", link: "https://spur.us/" },
+            { category: "IP & ASN Розвідка", name: "ViewDNS", desc: "Reverse IP, історія IP.", link: "https://viewdns.info/" },
+
+            { category: "Threat Intel", name: "AbuseIPDB", desc: "Перевірка IP-адреси на участь у спамі, DDoS.", link: "https://www.abuseipdb.com/" },
+            { category: "Threat Intel", name: "VirusTotal", desc: "Перевірка файлів, доменів та IP.", link: "https://www.virustotal.com/" },
+            { category: "Threat Intel", name: "AlienVault OTX", desc: "Платформа кіберрозвідки (IoC).", link: "https://otx.alienvault.com/" },
+            { category: "Threat Intel", name: "ThreatFox", desc: "База IoC від Abuse.ch.", link: "https://threatfox.abuse.ch/" },
+            { category: "Threat Intel", name: "Cloudflare Radar", desc: "Глобальна аналітика інтернет-трафіку та атак.", link: "https://radar.cloudflare.com/" },
+
+            { category: "DNS & Recon", name: "SecurityTrails", desc: "Потужний API для історії DNS.", link: "https://securitytrails.com/" },
+            { category: "DNS & Recon", name: "DNSDumpster", desc: "Виявлення хостів та візуалізація графу.", link: "https://dnsdumpster.com/" },
+            { category: "DNS & Recon", name: "crt.sh", desc: "Пошук субдоменів через сертифікати.", link: "https://crt.sh/" },
+
+            { category: "OSINT Людей", name: "Epieos", desc: "Пошук Google-акаунта за Email.", link: "https://epieos.com/" },
+            { category: "OSINT Людей", name: "WhatsMyName", desc: "Пошук нікнейму по 500+ сайтах.", link: "https://whatsmyname.app/" },
+            { category: "OSINT Людей", name: "Have I Been Pwned", desc: "Перевірка email на компрометацію.", link: "https://haveibeenpwned.com/" },
+
+            { category: "GEOINT", name: "Zoom.Earth", desc: "Топовий OSINT інструмент для супутникових знімків.", link: "https://zoom.earth/" },
+            { category: "GEOINT", name: "ADS-B Exchange", desc: "Невідфільтровані польотні дані.", link: "https://globe.adsbexchange.com/" },
+            { category: "GEOINT", name: "Marine Traffic", desc: "Відстеження морських суден.", link: "https://www.marinetraffic.com/" }
+        ];
+
+        const catalog = document.getElementById('catalogContainer');
+        const searchInput = document.getElementById('searchInputCatalog');
+
+        function displayTools(toolsToDisplay) {
+            catalog.innerHTML = '';
+            toolsToDisplay.forEach(tool => {
+                catalog.innerHTML += `
+                    <div class="card">
+                        <span style="font-size:11px; color:var(--ud-cyan); font-family:monospace; margin-bottom:5px;">${tool.category}</span>
+                        <h3>${tool.name}</h3>
+                        <p>${tool.desc}</p>
+                        <a href="${tool.link}" class="btn" target="_blank" style="margin-top:auto;">Відкрити ↗</a>
+                    </div>`;
+            });
+            if(toolsToDisplay.length === 0) catalog.innerHTML = '<p style="color: var(--text-muted);">Інструментів не знайдено...</p>';
+        }
+
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            displayTools(tools.filter(t => t.name.toLowerCase().includes(term) || t.desc.toLowerCase().includes(term) || t.category.toLowerCase().includes(term)));
+        });
+
+        displayTools(tools);
     </script>
 </body>
 </html>
